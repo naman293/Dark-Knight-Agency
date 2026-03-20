@@ -1,0 +1,57 @@
+:root {
+  /* Core palette */
+  --bg:        #070708;
+  --bg2:       #0c0c0e;
+  --surface:   #111113;
+  --surface2:  #161618;
+  --border:    #1c1c20;
+  --border2:   #272729;
+  --border3:   #333336;
+
+  /* Text */
+  --text:      #f2f2f4;
+  --text2:     #a0a0a6;
+  --text3:     #5a5a62;
+
+  /* Brand accents — tier colors */
+  --green:        #2dff8f;
+  --green-mid:    #1db868;
+  --green-dim:    rgba(45,255,143,0.08);
+  --green-glow:   rgba(45,255,143,0.15);
+  --green-border: rgba(45,255,143,0.25);
+
+  --blue:        #3d9eff;
+  --blue-mid:    #1e6fcc;
+  --blue-dim:    rgba(61,158,255,0.08);
+  --blue-glow:   rgba(61,158,255,0.15);
+  --blue-border: rgba(61,158,255,0.25);
+
+  --purple:        #b06bff;
+  --purple-mid:    #7c3fd4;
+  --purple-dim:    rgba(176,107,255,0.08);
+  --purple-glow:   rgba(176,107,255,0.15);
+  --purple-border: rgba(176,107,255,0.25);
+
+  --red:        #ff3d3d;
+  --red-mid:    #cc1e1e;
+  --red-dim:    rgba(255,61,61,0.08);
+  --red-glow:   rgba(255,61,61,0.15);
+  --red-border: rgba(255,61,61,0.25);
+
+  /* Typography */
+  --font-display: 'Syne', sans-serif;
+  --font-mono:    'IBM Plex Mono', monospace;
+
+  /* Spacing */
+  --section-pad: clamp(80px, 10vw, 140px);
+  --container:   1100px;
+
+  /* Radius */
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 16px;
+
+  /* Transitions */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+}

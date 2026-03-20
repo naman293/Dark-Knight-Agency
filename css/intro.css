@@ -1,0 +1,69 @@
+/* intro.css — Bat particle section */
+
+/* The bat section is a tall scroll container.
+   sticky inner div holds the canvas fullscreen.
+   Height = 200vh so scroll-progress has room to work. */
+#bat-section {
+  position: relative;
+  width: 100%;
+  height: 200vh;          /* tall enough for scroll travel */
+  z-index: 10;
+}
+
+#bat-sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #070708;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#bat-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: all;    /* needs mouse events */
+}
+
+/* Scroll hint */
+#bat-hint {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(45,255,143,0.5);
+  pointer-events: none;
+  z-index: 20;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  animation: batHintPulse 2.4s ease-in-out infinite;
+}
+
+#bat-hint.visible { opacity: 1; }
+
+@keyframes batHintPulse {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 0.8; }
+}
+
+/* Progress bar at top */
+#bat-progress {
+  position: absolute;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(to right, #2dff8f, #3d9eff);
+  z-index: 30;
+  pointer-events: none;
+  transition: width 0.1s linear;
+}
