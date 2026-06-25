@@ -233,9 +233,9 @@
 }
 
 .hero-headline {
-  font-size: clamp(52px, 9vw, 110px);
+  font-size: clamp(40px, 6vw, 76px);
   font-weight: 800;
-  line-height: 0.9;
+  line-height: 0.95;
   letter-spacing: -0.04em;
   margin-bottom: 2rem;
 }
@@ -248,7 +248,39 @@
 .hero-headline .word {
   display: inline-block;
   opacity: 0;
+  transform: translateY(0);
+}
+
+.dynamic-text-wrapper {
+  position: relative;
+  display: inline-flex;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.dynamic-word-placeholder {
+  visibility: hidden;
+  display: inline-block;
+  pointer-events: none;
+}
+
+.dynamic-word {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
   transform: translateY(100%);
+  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+}
+
+.dynamic-word.current {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dynamic-word.exit {
+  opacity: 0;
+  transform: translateY(-100%);
 }
 
 .hero-headline .word.animate {
@@ -490,23 +522,52 @@
   max-width: 540px;
 }
 
-/* ─── About / Philosophy ─────────────────────────────── */
-.about-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+/* ─── About / Philosophy (Sticky Stack) ────────────────── */
+.philosophy-section {
+  position: relative;
+  z-index: 10;
+  padding: 0 48px;
+  max-width: calc(var(--container) + 96px);
+  margin: 0 auto;
+}
+
+.philosophy-container {
+  display: flex;
   gap: 80px;
-  align-items: center;
-  margin-top: 64px;
+  position: relative;
+  /* We need a tall container so we can scroll through the stacked cards */
+  padding-bottom: 20vh;
 }
 
 @media (max-width: 900px) {
-  .about-grid {
-    grid-template-columns: 1fr;
+  .philosophy-container {
+    flex-direction: column;
     gap: 48px;
+    padding-bottom: 60px;
   }
 }
 
-.about-left .big-quote {
+.philosophy-left {
+  flex: 1;
+  /* Stick it to the top so it stays while cards scroll */
+  position: relative;
+}
+
+.sticky-content {
+  position: sticky;
+  top: calc(50vh - 150px);
+  padding-top: 100px; /* offset from nav */
+}
+
+@media (max-width: 900px) {
+  .sticky-content {
+    position: relative;
+    top: 0;
+    padding-top: 40px;
+  }
+}
+
+.sticky-content .big-quote {
   font-size: clamp(22px, 3vw, 32px);
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -515,17 +576,9 @@
   margin-bottom: 1.5rem;
 }
 
-.about-left .big-quote em {
+.sticky-content .big-quote em {
   color: var(--green);
   font-style: normal;
-}
-
-.about-left p {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--text3);
-  line-height: 1.8;
-  margin-bottom: 1rem;
 }
 
 .philosophy-pills {
@@ -552,140 +605,456 @@
   background: var(--green-dim);
 }
 
-.about-right {
+.philosophy-right {
+  flex: 1.2;
+  position: relative;
+  /* Add padding to let cards scroll */
+  padding-top: 100px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 40px; /* visual gap between cards when not sticky */
 }
 
-.about-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
+@media (max-width: 900px) {
+  .philosophy-right {
+    padding-top: 0;
+  }
+}
+
+/* Glassmorphism Cards */
+.phil-card {
+  position: sticky;
+  /* Calculate top based on index so they stack nicely! */
+  top: calc(120px + (var(--card-index) * 20px));
+  
+  background: rgba(17, 17, 19, 0.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  transition: border-color 0.4s, transform 0.2s ease-out, box-shadow 0.4s;
+  
+  /* 3D hover preparation */
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.phil-card:hover {
+  border-color: color-mix(in srgb, var(--glow-color) 40%, transparent);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 20px color-mix(in srgb, var(--glow-color) 15%, transparent);
+}
+
+/* Inner glow elements managed by JS mousemove */
+.phil-card-bg-glow {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), color-mix(in srgb, var(--glow-color) 6%, transparent), transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.phil-card-border-glow {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), color-mix(in srgb, var(--glow-color) 50%, transparent), transparent 40%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.phil-card-content {
+  position: relative;
+  z-index: 2;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (max-width: 600px) {
+  .phil-card-content {
+    padding: 1.5rem;
+  }
+}
+
+.phil-card-visual {
+  height: 200px;
+  background: var(--surface2);
   border-radius: var(--r-md);
-  padding: 1.5rem;
-  transition: border-color 0.3s, transform 0.3s var(--ease);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.about-card:hover {
-  border-color: var(--border3);
-  transform: translateX(6px);
+.phil-card-text {
+  position: relative;
 }
 
-.about-card-icon {
-  font-size: 22px;
-  margin-bottom: 10px;
-}
-
-.about-card h4 {
-  font-size: 15px;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-
-.about-card p {
+.phil-card-num {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 11px;
+  color: var(--glow-color);
+  margin-bottom: 0.5rem;
+}
+
+.phil-card-text h3 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+.phil-card-text p {
+  font-family: var(--font-mono);
+  font-size: 13px;
   color: var(--text3);
   line-height: 1.6;
 }
 
+/* --- Visual 1: Graph --- */
+.visual-graph {
+  position: absolute;
+  inset: 0;
+  padding-top: 40px;
+}
+.graph-line {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: drawLine 3s ease-out forwards infinite;
+}
+.graph-fill {
+  opacity: 0;
+  animation: fadeIn 3s ease-out forwards infinite;
+}
+@keyframes drawLine {
+  0% { stroke-dashoffset: 200; }
+  50%, 100% { stroke-dashoffset: 0; }
+}
+.graph-point {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--bg);
+  border: 2px solid var(--green);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px var(--green);
+  animation: pulse-green 2s infinite;
+}
+
+/* --- Visual 2: Network --- */
+.visual-network {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.network-node {
+  position: absolute;
+  background: var(--bg);
+  border: 2px solid var(--purple);
+  border-radius: 50%;
+  box-shadow: 0 0 15px var(--purple-glow);
+  z-index: 2;
+}
+.main-node {
+  width: 16px;
+  height: 16px;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+}
+.sub-node {
+  width: 10px;
+  height: 10px;
+}
+.sub-node.n1 { left: 20%; top: 20%; transform: translate(-50%, -50%); animation: float 3s infinite; }
+.sub-node.n2 { left: 80%; top: 30%; transform: translate(-50%, -50%); animation: float 4s infinite reverse; }
+.sub-node.n3 { left: 50%; top: 80%; transform: translate(-50%, -50%); animation: float 3.5s infinite; }
+.network-lines {
+  position: absolute;
+  width: 100%; height: 100%;
+  z-index: 1;
+}
+.pulse-circle {
+  transform-origin: center;
+  animation: expandFade 2s infinite;
+}
+@keyframes expandFade {
+  0% { transform: scale(0.5); opacity: 1; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+/* --- Visual 3: Radar --- */
+.visual-radar {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.radar-ring {
+  position: absolute;
+  border: 1px solid var(--blue-border);
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+.radar-ring.r1 { width: 60px; height: 60px; }
+.radar-ring.r2 { width: 120px; height: 120px; }
+.radar-ring.r3 { width: 180px; height: 180px; }
+.radar-sweep {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: conic-gradient(from 0deg, transparent 0deg, color-mix(in srgb, var(--blue) 40%, transparent) 90deg, transparent 90deg);
+  top: 50%; left: 50%;
+  transform-origin: 0% 0%;
+  animation: rotate-slow 4s linear infinite;
+  border-radius: 0 100px 0 0;
+}
+.radar-dot {
+  position: absolute;
+  width: 6px; height: 6px;
+  background: var(--blue);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--blue);
+  animation: blink 2s infinite;
+}
+.radar-dot.dot1 { top: 30%; left: 40%; }
+.radar-dot.dot2 { top: 70%; left: 60%; animation-delay: 1s; }
+
 /* ─── Services / What We Build ───────────────────────── */
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
+.services-section {
+  padding: 120px 5%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.services-header {
+  margin-bottom: 64px;
+}
+
+.services-accordion {
+  display: flex;
+  height: 600px;
+  gap: 8px;
   border-radius: var(--r-lg);
   overflow: hidden;
-  margin-top: 64px;
 }
 
-@media (max-width: 900px) {
-  .services-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 600px) {
-  .services-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.service-card {
-  background: var(--surface);
-  padding: 2.5rem 2rem;
-  transition: background 0.3s;
+.service-pillar {
+  flex: 1;
   position: relative;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  transition: flex 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s, background 0.6s;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.service-pillar.active,
+.service-pillar:hover {
+  flex: 4;
+  border-color: var(--accent-color);
+  background: var(--surface);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.pillar-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   overflow: hidden;
 }
 
-.service-card::before {
-  content: '';
+.bg-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--accent-color, var(--green));
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.4s var(--ease);
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10,10,12,0.8) 0%, rgba(10,10,12,0.2) 50%, rgba(10,10,12,0.9) 100%);
+  z-index: 2;
+  transition: opacity 0.4s;
+}
+.service-pillar:hover .bg-overlay,
+.service-pillar.active .bg-overlay {
+  opacity: 0.6;
 }
 
-.service-card:hover::before {
-  transform: scaleX(1);
+.bg-visual {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 32%; /* Restrict to top 68% of pillar */
+  z-index: 1;
+  opacity: 0; /* Hidden on small cards for glassmorphism focus */
+  transition: opacity 0.4s, transform 0.8s;
+  transform: scale(1.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px; /* Removed padding because the SVG viewBox already provides natural inner whitespace */
+}
+.service-pillar:hover .bg-visual,
+.service-pillar.active .bg-visual {
+  opacity: 1; /* Shows animation only when expanded */
+  transform: scale(1.1); /* Slight upscale to make graphics punchier and perfectly sized */
 }
 
-.service-card:hover {
-  background: var(--surface2);
+.pillar-content {
+  position: relative;
+  z-index: 3;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px;
+}
+
+.pillar-top {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .service-num {
   font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--text3);
-  letter-spacing: 0.15em;
-  margin-bottom: 1.5rem;
+  font-size: 14px;
+  color: var(--accent-color);
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  margin-bottom: 24px;
 }
 
-.service-icon {
-  font-size: 32px;
-  margin-bottom: 1rem;
-}
-
-.service-title {
-  font-size: 18px;
-  font-weight: 700;
+.service-title-vert {
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  font-size: clamp(24px, 4vh, 40px);
+  font-weight: 600;
+  white-space: nowrap;
   letter-spacing: -0.02em;
-  margin-bottom: 0.75rem;
+  color: var(--text2);
+  transition: opacity 0.3s;
+}
+
+.service-pillar:hover .service-title-vert,
+.service-pillar.active .service-title-vert {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pillar-bottom {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s, transform 0.4s;
+  pointer-events: none;
+}
+
+.service-pillar:hover .pillar-bottom,
+.service-pillar.active .pillar-bottom {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition-delay: 0.2s;
+}
+
+.service-title-horz {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+  color: var(--text1);
 }
 
 .service-desc {
   font-family: var(--font-mono);
   font-size: 12px;
-  color: var(--text3);
-  line-height: 1.7;
-  margin-bottom: 1.5rem;
+  color: var(--text2);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  max-width: 400px;
 }
 
 .service-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
 }
 
 .service-tag {
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.06em;
-  padding: 4px 10px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 3px;
+  padding: 6px 12px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
   color: var(--text3);
+  backdrop-filter: blur(4px);
 }
+
+/* Fallback for Mobile (Vertical Accordion) */
+@media (max-width: 900px) {
+  .services-accordion {
+    flex-direction: column;
+    height: 800px;
+  }
+  .service-title-vert {
+    writing-mode: horizontal-tb;
+    transform: none;
+    margin-top: -10px;
+  }
+  .pillar-bottom {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+  }
+}
+
+
+/* ─── SVG Motion Graphic Visuals (GSAP-animated) ─── */
+.visual-portfolio, .visual-growth, .visual-ai,
+.visual-social, .visual-webapp, .visual-enterprise {
+  display: flex; align-items: center; justify-content: center;
+}
+.portfolio-svg, .growth-svg, .ai-svg,
+.social-svg, .webapp-svg, .enterprise-svg {
+  width: 100%; height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  position: relative;
+  transform-origin: center center;
+}
+
+/* Accent glow per service on expand */
+.service-pillar[data-pillar="1"]:is(:hover,.active) .bg-visual { filter: drop-shadow(0 0 22px rgba(29,184,104,0.35)); }
+.service-pillar[data-pillar="2"]:is(:hover,.active) .bg-visual { filter: drop-shadow(0 0 22px rgba(62,142,255,0.35)); }
+.service-pillar[data-pillar="3"]:is(:hover,.active) .bg-visual { filter: drop-shadow(0 0 22px rgba(139,92,246,0.35)); }
+.service-pillar[data-pillar="4"]:is(:hover,.active) .bg-visual { filter: drop-shadow(0 0 22px rgba(255,62,62,0.35)); }
+.service-pillar[data-pillar="5"]:is(:hover,.active) .bg-visual { filter: drop-shadow(0 0 22px rgba(240,192,53,0.35)); }
+.service-pillar[data-pillar="6"]:is(:hover,.active) .bg-visual { filter: drop-shadow(0 0 22px rgba(29,184,104,0.35)); }
+
+/* CSS idle animations — purely supplementary to GSAP */
+@keyframes coreBreath {
+  0%, 100% { opacity: 0.08; } 50% { opacity: 0.2; }
+}
+.ai-core-glow { animation: coreBreath 3s ease-in-out infinite; }
+
+@keyframes hubPulse {
+  0%, 100% { opacity: 0.15; } 50% { opacity: 0.35; }
+}
+.soc-hub { animation: hubPulse 2.5s ease-in-out infinite; }
 
 /* ─── Pricing ────────────────────────────────────────── */
 .pricing-nav {
@@ -735,6 +1104,13 @@
   color: var(--red);
   border: 1px solid var(--red-border);
 }
+
+.pricing-tab.active-gold {
+  background: var(--gold-dim);
+  color: var(--gold);
+  border: 1px solid var(--gold-border);
+}
+
 
 .pricing-tab:not([class*="active"]):hover {
   color: var(--text2);
@@ -990,56 +1366,68 @@
 }
 
 .process-line {
-  position: absolute;
-  top: 28px;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--border);
+  display: none;
 }
 
-.process-line-fill {
+.process-curve-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
-  background: linear-gradient(to right, var(--green), var(--blue), var(--purple), var(--red));
-  width: 0;
-  transition: width 1.5s var(--ease);
+  pointer-events: none;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .process-curve-svg {
+    display: none;
+  }
 }
 
 .process-steps {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
+  display: flex;
+  justify-content: space-between;
   position: relative;
-}
-
-@media (max-width: 768px) {
-  .process-steps {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 480px) {
-  .process-steps {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .process-line {
-    display: none;
-  }
+  perspective: 1200px;
+  gap: 1.5rem;
 }
 
 .process-step {
   text-align: center;
   padding-top: 16px;
+  flex: 1;
+  position: relative;
 }
 
+/* ── Glassmorphism 3D Card ── */
+.process-card {
+  margin-top: 1rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  backdrop-filter: blur(12px);
+  transform-style: preserve-3d;
+  position: relative;
+  overflow: hidden;
+  /* STRICTLY hidden until checkpoint fires */
+  opacity: 0;
+  transform: perspective(800px) rotateX(-40deg) translateY(30px) scale(0.95);
+  visibility: hidden; /* Extra insurance - no flicker */
+}
+.process-card.card-revealed {
+  visibility: visible;
+}
+
+
+
+/* ── Process Dot ── */
 .process-dot {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  margin: 0 auto 1.5rem;
+  margin: 0 auto;
   border: 2px solid var(--border2);
   background: var(--bg);
   position: relative;
@@ -1047,9 +1435,57 @@
   transition: border-color 0.4s, box-shadow 0.4s;
 }
 
+/* ── Shockwave Ripples ── */
+.node-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120px;
+  height: 120px;
+  transform: translate(-50%, -50%) scale(0);
+  pointer-events: none;
+  opacity: 0;
+  z-index: -1;
+}
+
 .process-dot.active {
   border-color: var(--dot-color);
-  box-shadow: 0 0 0 4px var(--dot-glow);
+  box-shadow: 0 0 0 6px var(--dot-glow), 0 0 30px var(--dot-glow);
+}
+
+/* ── Cyber Particles ── */
+.cyber-particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+.cyber-p {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--dot-color);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  text-shadow: 0 0 8px var(--dot-color);
+  white-space: nowrap;
+}
+
+/* ── Text Scramble ── */
+.process-step-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  position: relative;
+}
+.process-step-title .scramble-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: none; /* GSAP handles it */
 }
 
 .process-dot-inner {
@@ -1073,11 +1509,7 @@
   margin-bottom: 8px;
 }
 
-.process-step-title {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
+
 
 .process-step-desc {
   font-family: var(--font-mono);
@@ -1921,4 +2353,41 @@ footer {
   footer {
     padding: 64px;
   }
+}
+
+/* ─── Process Steps (restored after SVG change) ──────── */
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .process-steps {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .process-steps {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Magnetic Button ────────────────────────────────── */
+.btn-primary,
+.btn-secondary,
+.btn-wa {
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  will-change: transform;
+}
+
+.btn-primary:hover,
+.btn-wa:hover {
+  box-shadow: 0 4px 24px rgba(45, 255, 143, 0.2);
+}
+
+.btn-secondary:hover {
+  box-shadow: 0 4px 24px rgba(255, 255, 255, 0.06);
 }

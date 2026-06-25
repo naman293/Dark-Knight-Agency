@@ -5,15 +5,16 @@
   const panels = document.querySelectorAll('.pricing-panel');
 
   const colorMap = {
-    starter: 'active-green',
-    growth:  'active-blue',
-    premium: 'active-purple',
-    elite:   'active-red',
+    spark:      'active-green',
+    growth:     'active-blue',
+    automate:   'active-purple',
+    scale:      'active-red',
+    enterprise: 'active-gold',
   };
 
   function showTier(tier) {
     tabs.forEach(t => {
-      t.classList.remove('active-green', 'active-blue', 'active-purple', 'active-red');
+      t.classList.remove('active-green', 'active-blue', 'active-purple', 'active-red', 'active-gold');
     });
     panels.forEach(p => p.classList.remove('active'));
 
@@ -31,5 +32,5 @@
   });
 
   // Init
-  showTier('starter');
+  showTier('spark');
 })();

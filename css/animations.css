@@ -87,39 +87,39 @@
 
 .reveal {
   opacity: 0;
-  transform: translateY(50px);
-  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+  transform: translateY(40px) scale(0.98);
+  transition: opacity 1s var(--ease), transform 1s var(--ease);
 }
 
 .reveal.revealed {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 .reveal-left {
   opacity: 0;
-  transform: translateX(-60px);
-  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+  transform: translateX(-50px) scale(0.98);
+  transition: opacity 1s var(--ease), transform 1s var(--ease);
 }
 .reveal-left.revealed {
   opacity: 1;
-  transform: translateX(0);
+  transform: translateX(0) scale(1);
 }
 
 .reveal-right {
   opacity: 0;
-  transform: translateX(60px);
-  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+  transform: translateX(50px) scale(0.98);
+  transition: opacity 1s var(--ease), transform 1s var(--ease);
 }
 .reveal-right.revealed {
   opacity: 1;
-  transform: translateX(0);
+  transform: translateX(0) scale(1);
 }
 
 .reveal-scale {
   opacity: 0;
-  transform: scale(0.92);
-  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  transform: scale(0.9);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
 }
 .reveal-scale.revealed {
   opacity: 1;

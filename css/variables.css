@@ -38,6 +38,12 @@
   --red-glow:   rgba(255,61,61,0.15);
   --red-border: rgba(255,61,61,0.25);
 
+  --gold:        #ffb830;
+  --gold-mid:    #cc8e1a;
+  --gold-dim:    rgba(255,184,48,0.08);
+  --gold-glow:   rgba(255,184,48,0.15);
+  --gold-border: rgba(255,184,48,0.25);
+
   /* Typography */
   --font-display: 'Syne', sans-serif;
   --font-mono:    'IBM Plex Mono', monospace;

@@ -102,4 +102,100 @@
     });
   });
 
+  /* ── Magnetic Button Effect ──────────────────────── */
+  document.querySelectorAll('.btn-primary, .btn-secondary, .btn-wa').forEach(btn => {
+    btn.addEventListener('mousemove', e => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+    });
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = '';
+    });
+  });
+
+  /* ── Glass Card Cursor Glow ─────────────────────── */
+  document.querySelectorAll('.glass-card').forEach(card => {
+    const glow = card.querySelector('.about-card-glow');
+    if (!glow) return;
+
+    // Set glow color from data attribute
+    const glowColor = card.getAttribute('data-glow-color');
+    if (glowColor) {
+      glow.style.background = `radial-gradient(circle, ${glowColor} 0%, transparent 70%)`;
+      glow.style.opacity = '0';
+    }
+
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      glow.style.left = x + 'px';
+      glow.style.top = y + 'px';
+      glow.style.opacity = '0.5';
+    });
+
+    card.addEventListener('mouseleave', () => {
+      glow.style.opacity = '0';
+    });
+  });
+
+  /* ── Live Terminal Feed ──────────────────────────── */
+  const termFeed = document.getElementById('terminal-feed');
+  if (termFeed) {
+    const logs = [
+      { time: '2:00 AM', action: 'Visitor detected on landing page.', hl: false },
+      { time: '2:00 AM', action: 'AI Chatbot engaged: ', hl: '"Looking for SaaS development?"' },
+      { time: '2:01 AM', action: 'Lead qualified — ', hl: 'Budget match ✓' },
+      { time: '2:01 AM', action: 'Workflow: Updated Notion & triggered ', hl: 'WhatsApp alert.' },
+      { time: '2:02 AM', action: 'Auto-reply sent to Instagram DM.', hl: false },
+      { time: '2:03 AM', action: 'New contact added to CRM.', hl: false },
+      { time: '2:05 AM', action: 'Follow-up email scheduled — ', hl: '48h drip.' },
+      { time: '2:10 AM', action: 'Session analytics logged.', hl: false },
+    ];
+
+    let logIdx = 0;
+    const MAX_LINES = 6;
+
+    function addTermLine() {
+      const log = logs[logIdx % logs.length];
+      const line = document.createElement('div');
+      line.className = 'terminal-line';
+      let html = `<span class="t-time">[${log.time}]</span> <span class="t-action">${log.action}</span>`;
+      if (log.hl) {
+        html += `<span class="t-highlight">${log.hl}</span>`;
+      }
+      line.innerHTML = html;
+      termFeed.appendChild(line);
+
+      // Remove oldest if too many
+      while (termFeed.children.length > MAX_LINES) {
+        termFeed.removeChild(termFeed.firstChild);
+      }
+
+      logIdx++;
+      setTimeout(addTermLine, 1800 + Math.random() * 1200);
+    }
+
+    // Start after a small delay
+    setTimeout(addTermLine, 2000);
+  }
+
+  /* ── Dynamic Hero Text Rotation ──────────────────── */
+  const dynamicWords = document.querySelectorAll('.dynamic-word');
+  if (dynamicWords.length > 0) {
+    let wordIdx = 0;
+    setInterval(() => {
+      const currentWord = dynamicWords[wordIdx];
+      currentWord.classList.remove('current');
+      currentWord.classList.add('exit');
+      
+      wordIdx = (wordIdx + 1) % dynamicWords.length;
+      const nextWord = dynamicWords[wordIdx];
+      nextWord.classList.remove('exit');
+      nextWord.classList.add('current');
+    }, 2500);
+  }
+
 })();
