@@ -222,13 +222,38 @@
         scale: 1,
         duration: 0.7,
         ease: 'back.out(1.7)',
-        delay: 0.1
+        delay: 0.1,
+        overwrite: 'auto'
       });
 
       // 5) Holographic text scramble
       if (titleEl) {
         setTimeout(() => scrambleText(titleEl), 200);
       }
+    }
+
+    // ── Reset Checkpoint Animations ──
+    function resetCheckpoint(i) {
+      if (!firedCheckpoints.has(i)) return;
+      firedCheckpoints.delete(i);
+
+      const dot = processDots[i];
+      const stepParent = dot.closest('.process-step');
+      const card = stepParent.querySelector('.process-card');
+
+      dot.classList.remove('active');
+      gsap.to(dot, { scale: 1, duration: 0.3 });
+
+      card.classList.remove('card-revealed');
+      gsap.to(card, {
+        opacity: 0,
+        rotateX: -40,
+        translateY: 30,
+        scale: 0.95,
+        duration: 0.4,
+        ease: 'power2.in',
+        overwrite: 'auto'
+      });
     }
 
     // ── GSAP ScrollTrigger Timeline ──
@@ -247,6 +272,8 @@
             // Trigger slightly before the spark reaches the node
             if (progress >= threshold * 0.95 + 0.02) {
               fireCheckpoint(i);
+            } else {
+              resetCheckpoint(i);
             }
           });
         }
