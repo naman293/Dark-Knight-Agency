@@ -30,14 +30,16 @@ We guide our clients through a frictionless, transparent onboarding and developm
 
 We scale our services to match your growth stage:
 
-1. **Tier 01: Launch Presence** (₹5K–₹10K)
-   - The essentials. A 1-page powerhouse to get your brand online fast. (1–2 days delivery)
-2. **Tier 02: Scale Machine** (₹15K–₹30K)
-   - A strategic 3–5 page site with custom interactions. (3–5 days delivery)
-3. **Tier 03: Authority Engine** (₹40K–₹80K)
-   - Deep custom design, multi-page architecture, and third-party API integrations. (5–10 days delivery)
-4. **Tier 04: Elite Full Arsenal** (₹1L–₹3L+)
-   - Full-scale SaaS products, custom web apps, and complete business automation systems. (10–30 days delivery)
+1. **Tier 01: Spark** (₹8K–₹25K)
+   - **Portfolio & Landing Page**: Your first weapon online. Get found. Get called. Get paid. (2–3 days delivery)
+2. **Tier 02: Growth** (₹25K–₹60K)
+   - **Business Growth Site**: Multi-page, SEO-ready, CMS-powered. Built to convert visitors into leads. (5–10 days delivery)
+3. **Tier 03: Automate** (₹30K–₹75K setup + retainer)
+   - **AI & Social Automation**: WhatsApp bots, Instagram DMs, and lead workflows running 24/7. (7–14 days delivery)
+4. **Tier 04: Scale** (₹1.5L–₹5L)
+   - **Full-Stack Web App**: SaaS, dashboards, and custom backends. For founders serious about digital scale. (15–45 days delivery)
+5. **Tier 05: Enterprise** (₹5L–₹25L+)
+   - **Full AI System**: Multi-workflow AI agents, CRM integrations, and enterprise-grade automation at scale. (Phased rollout)
 
 ---
 *Dark Knight Agency — We don't just build websites, we build growth machines.*
