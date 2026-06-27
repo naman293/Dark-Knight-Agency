@@ -750,7 +750,7 @@
   animation: pulse-green 2s infinite;
 }
 
-/* --- Visual 2: Network --- */
+/* --- Visual 2: Detailed AI Network --- */
 .visual-network {
   position: absolute;
   inset: 0;
@@ -758,42 +758,49 @@
   align-items: center;
   justify-content: center;
 }
-.network-node {
-  position: absolute;
-  background: var(--bg);
-  border: 2px solid var(--purple);
-  border-radius: 50%;
-  box-shadow: 0 0 15px var(--purple-glow);
-  z-index: 2;
-}
-.main-node {
-  width: 16px;
-  height: 16px;
-  left: 50%; top: 50%;
-  transform: translate(-50%, -50%);
-}
-.sub-node {
-  width: 10px;
-  height: 10px;
-}
-.sub-node.n1 { left: 20%; top: 20%; transform: translate(-50%, -50%); animation: float 3s infinite; }
-.sub-node.n2 { left: 80%; top: 30%; transform: translate(-50%, -50%); animation: float 4s infinite reverse; }
-.sub-node.n3 { left: 50%; top: 80%; transform: translate(-50%, -50%); animation: float 3.5s infinite; }
-.network-lines {
-  position: absolute;
-  width: 100%; height: 100%;
-  z-index: 1;
-}
-.pulse-circle {
-  transform-origin: center;
-  animation: expandFade 2s infinite;
-}
-@keyframes expandFade {
-  0% { transform: scale(0.5); opacity: 1; }
-  100% { transform: scale(3); opacity: 0; }
+
+.detailed-ai-network {
+  width: 100%;
+  height: 100%;
 }
 
-/* --- Visual 3: Radar --- */
+.ai-node-float {
+  animation: nodeFloat 3s ease-in-out infinite alternate;
+}
+@keyframes nodeFloat {
+  0% { transform: translateY(-2px); }
+  100% { transform: translateY(2px); }
+}
+
+.ai-spin-slow {
+  transform-origin: 0 0;
+  animation: aiSpin 8s linear infinite;
+}
+.ai-spin-fast-reverse {
+  transform-origin: 0 0;
+  animation: aiSpin 4s linear infinite reverse;
+}
+@keyframes aiSpin {
+  100% { transform: rotate(360deg); }
+}
+
+.ai-pulse-core {
+  animation: aiPulse 2s ease-in-out infinite alternate;
+}
+@keyframes aiPulse {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  100% { transform: scale(1.1); opacity: 1; }
+}
+
+.ai-sparkle {
+  animation: aiSparkleFade 1.5s ease-in-out infinite alternate;
+}
+@keyframes aiSparkleFade {
+  0% { opacity: 0.2; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1.2); }
+}
+
+/* --- Visual 3: Lead Capture --- */
 .visual-radar {
   position: absolute;
   inset: 0;
@@ -802,36 +809,47 @@
   justify-content: center;
   overflow: hidden;
 }
-.radar-ring {
-  position: absolute;
-  border: 1px solid var(--blue-border);
-  border-radius: 50%;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
+.animated-path-flow {
+  animation: dashFlow 2s linear infinite;
 }
-.radar-ring.r1 { width: 60px; height: 60px; }
-.radar-ring.r2 { width: 120px; height: 120px; }
-.radar-ring.r3 { width: 180px; height: 180px; }
-.radar-sweep {
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  background: conic-gradient(from 0deg, transparent 0deg, color-mix(in srgb, var(--blue) 40%, transparent) 90deg, transparent 90deg);
-  top: 50%; left: 50%;
-  transform-origin: 0% 0%;
-  animation: rotate-slow 4s linear infinite;
-  border-radius: 0 100px 0 0;
+@keyframes dashFlow {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -20; }
 }
-.radar-dot {
-  position: absolute;
-  width: 6px; height: 6px;
-  background: var(--blue);
-  border-radius: 50%;
-  box-shadow: 0 0 8px var(--blue);
-  animation: blink 2s infinite;
+.radar-spin-svg {
+  animation: radarSpin 4s linear infinite;
 }
-.radar-dot.dot1 { top: 30%; left: 40%; }
-.radar-dot.dot2 { top: 70%; left: 60%; animation-delay: 1s; }
+@keyframes radarSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.pulse-crm-light {
+  animation: pulseLight 2s ease-in-out infinite alternate;
+}
+@keyframes pulseLight {
+  0% { opacity: 0.5; filter: drop-shadow(0 0 2px var(--blue)); }
+  100% { opacity: 1; filter: drop-shadow(0 0 8px var(--blue)); }
+}
+.pulse-crm-ring {
+  animation: pulseRing 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulseRing {
+  0% { transform: scale(0.9); opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { transform: scale(1.15); opacity: 0; }
+}
+.crm-node-float {
+  animation: aiFloat 4s ease-in-out infinite;
+}
+.target-spin {
+  animation: targetSpin 4s linear infinite;
+  transform-origin: center;
+}
+@keyframes targetSpin {
+  0% { transform: rotate(0deg) scale(0.8); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(0.8); }
+}
 
 /* ─── Services / What We Build ───────────────────────── */
 .services-section {
@@ -954,6 +972,10 @@
 }
 
 .pillar-bottom {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  right: 24px;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.4s, transform 0.4s;
@@ -987,20 +1009,55 @@
 
 .service-tags {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  flex-wrap: nowrap;
+  gap: 6px;
 }
 
 .service-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  line-height: 1;
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  padding: 6px 12px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 4px;
-  color: var(--text3);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: var(--text2);
   backdrop-filter: blur(4px);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  z-index: 1;
+  cursor: default;
+}
+
+.service-tag::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-20deg);
+  z-index: -1;
+  transition: all 0.6s ease;
+}
+
+.service-tag:hover {
+  color: #fff;
+  border-color: var(--accent-color);
+  background: color-mix(in srgb, var(--accent-color) 15%, transparent);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--accent-color) 30%, transparent);
+  transform: translateY(-2px);
+}
+
+.service-tag:hover::before {
+  left: 150%;
 }
 
 /* Fallback for Mobile (Vertical Accordion) */

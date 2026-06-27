@@ -86,10 +86,10 @@
 
   /* Scroll: find which section is in view */
   window.addEventListener('scroll', () => {
-    const scrollMid = window.scrollY + window.innerHeight * 0.4;
+    const threshold = window.innerHeight * 0.4;
     let current = '';
     sections.forEach(s => {
-      if (s.offsetTop <= scrollMid) current = s.id;
+      if (s.getBoundingClientRect().top <= threshold) current = s.id;
     });
     setActive(current);
   }, { passive: true });

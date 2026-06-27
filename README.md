@@ -1,27 +1,22 @@
 # Dark Knight Agency — We Build Growth
 
-![Dark Knight Agency Hero](screenshots/hero.png)
-
 Dark Knight Agency builds premium websites that generate more customers, more leads, and more revenue. We don't just build websites — we build growth machines.
 
 ## 🦇 Branding & Philosophy
-![Batman Logo](screenshots/batman_logo.png)
 
 - **Revenue-First Thinking**: Every project starts with one question: *How does this make you more money?*
 - **Zero Templates**: Fully custom designs tailored to your business stage.
-- **Interactive Edge**: 3D elements and premium animations that set you apart.
+- **Interactive Edge**: Advanced 3D elements, premium GSAP animations, and custom SVG motion graphics.
 - **Speed + Quality**: Starter sites in 1–2 days. Premium builds in under 2 weeks.
 
-## ⚔️ Our Services
-![Services Section](screenshots/services_section.png)
+## ⚔️ What We Build (Advanced SVG Motion)
 
-We offer a range of specialized weapons for your business growth:
-- **Landing Presence**: 1-page high-converting funnels.
-- **Scale Machine**: Strategic multi-page sites.
-- **Authority Engine**: Custom apps and deep integrations.
+Our services feature rich, choreographed animations built entirely with Vanilla CSS and GSAP. 
+- **Dynamic 3D Flips**: Cards that flip and expand based on interaction.
+- **Data-Driven SVGs**: Neural network lines, tracking dashboards, and social network nodes that actually draw themselves on screen.
+- **Responsive Animations**: Everything adapts seamlessly from mobile to ultrawide desktops without losing layout integrity.
 
 ## 💎 Pick Your Weapon (Pricing Tiers)
-![Pricing Sections](screenshots/pricing_section.png)
 
 1. **Tier 01: Launch Presence** (₹5K–₹10K)
    - 1-page powerhouse in Framer. 1–2 days delivery.
@@ -32,18 +27,16 @@ We offer a range of specialized weapons for your business growth:
 4. **Tier 04: Elite Full Arsenal** (₹1L–₹3L+)
    - SaaS / Web apps in Next.js + Supabase. 10–30 days delivery.
 
-## ⚙️ How We Work (Our Process)
-![Process Section](screenshots/process_section.png)
+## ⚙️ How We Work (Scroll-Triggered Process)
 
+We guide our clients through a frictionless onboarding funnel, completely visualized through a fully responsive GSAP ScrollTrigger timeline:
 1. **Discovery**: No-fluff 30-minute call to learn your business goals.
 2. **Design**: Wireframe and design approval before coding starts.
 3. **Build**: Fast, transparent build with daily previews.
 4. **Launch**: Performance-optimized, mobile-perfect, and live.
 
 ## 🛠️ The Tech Stack
-- **Design & Performance**: Framer, Webflow, Tailwind CSS, GSAP
-- **Full-Stack development**: Next.js, Supabase, Custom APIs
-- **Core Experience**: HTML5, Vanilla JS, Premium Animations
-
-## 📱 Contact
-Ready to grow? [Message us on WhatsApp](https://wa.me/917597562205)
+- **Animation Engine**: Custom GSAP timelines, ScrollTrigger, and MotionPath.
+- **Design & Performance**: Vanilla HTML/CSS architecture, fluid typography, Flexbox/Grid.
+- **Full-Stack capabilities**: Next.js, Supabase, Custom APIs, React.
+- **Core Experience**: Zero external UI libraries, 100% custom-coded motion sequences.

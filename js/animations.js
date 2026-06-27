@@ -303,13 +303,19 @@
 
   // Build on load and resize
   if (curveSvg) {
-    setTimeout(buildCurve, 500);
+    window.addEventListener('load', () => {
+      // Clear GSAP scroll memory manually for safety
+      if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.clearScrollMemory();
+      }
+      buildCurve();
+    });
     let resizeTimer;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         curveReady = false;
-        ScrollTrigger.refresh();
+        if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
         buildCurve();
       }, 300);
     });
